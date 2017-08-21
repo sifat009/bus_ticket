@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 21, 2017 at 09:40 AM
+-- Generation Time: Aug 21, 2017 at 06:25 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -41,11 +41,21 @@ CREATE TABLE IF NOT EXISTS `admins` (
 CREATE TABLE IF NOT EXISTS `buses` (
   `id` int(11) NOT NULL,
   `route_id` varchar(50) NOT NULL,
-  `total_seats` int(11) NOT NULL,
+  `total_seats` int(11) NOT NULL DEFAULT '40',
   `time` varchar(20) NOT NULL,
-  `date` datetime NOT NULL,
-  `active` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `active` char(1) NOT NULL DEFAULT '1',
+  `price` varchar(20) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `buses`
+--
+
+INSERT INTO `buses` (`id`, `route_id`, `total_seats`, `time`, `active`, `price`) VALUES
+(1, '4', 40, '7:00 AM', '1', '500'),
+(4, '2', 40, '11:00 AM', '1', '500'),
+(5, '3', 40, '5:15 PM', '1', '500'),
+(6, '1', 40, '7:30 PM', '1', '500');
 
 -- --------------------------------------------------------
 
@@ -106,7 +116,6 @@ CREATE TABLE IF NOT EXISTS `seats` (
 
 CREATE TABLE IF NOT EXISTS `tickets` (
   `id` int(11) NOT NULL,
-  `price` varchar(20) NOT NULL,
   `action` tinyint(1) NOT NULL,
   `passenger_id` int(11) NOT NULL,
   `bus_id` int(11) NOT NULL
@@ -177,7 +186,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `buses`
 --
 ALTER TABLE `buses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `passengers`
 --

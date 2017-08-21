@@ -1,3 +1,21 @@
+<?php
+	include "../../../config/db.php";
+	include "../../../functions/print.php";
+	$query = "SELECT buses.id,routes.direction, buses.time FROM buses JOIN routes WHERE( buses.route_id = routes.id )";
+	$result = $db->query($query);
+	if(isset($_GET['id'])){
+		$q = "DELETE FROM buses WHERE id = ?";
+		$stmt = $db->prepare($q);
+		$r = $stmt->execute(array($_GET['id']));
+		if($r){
+			header("location: view_shedule.php");
+		} else{
+			echo "Error in deleting";
+		}
+	}
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -202,48 +220,14 @@
 								</tr>
 							</thead>
 							<tbody>
+							<?php foreach($result as $row): ?>
 								<tr>
-									<td>1</td>
-									<td>place(A) to place(B)</td>
-									<td>1.30 P.M.</td>
-									<td><a class="btn btn-danger " >Delete</a></td>
+									<td><?= $row['id'] ?></td>
+									<td><?= $row['direction'] ?></td>
+									<td><?= $row['time'] ?></td>
+									<td><a href="view_shedule.php?id=<?= $row['id'] ?>" onclick="sure()" class="btn btn-danger " >Delete</a></td>
 								</tr>
-								<tr>
-									<td>2</td>
-									<td>place(A) to place(B)</td>
-									<td>1.30 P.M.</td>
-									<td><a class="btn btn-danger " >Delete</a></td>
-								</tr>
-								<tr>
-									<td>3</td>
-									<td>place(A) to place(B)</td>
-									<td>1.30 P.M.</td>
-									<td><a class="btn btn-danger " >Delete</a></td>
-								</tr>
-								<tr>
-									<td>4</td>
-									<td>place(A) to place(B)</td>
-									<td>1.30 P.M.</td>
-									<td><a class="btn btn-danger " >Delete</a></td>
-								</tr>
-								<tr>
-									<td>5</td>
-									<td>place(A) to place(B)</td>
-									<td>1.30 P.M.</td>
-									<td><a class="btn btn-danger " >Delete</a></td>
-								</tr>
-								<tr>
-									<td>6</td>
-									<td>place(A) to place(B)</td>
-									<td>1.30 P.M.</td>
-									<td><a class="btn btn-danger " >Delete</a></td>
-								</tr>
-								<tr>
-									<td>7</td>
-									<td>place(A) to place(B)</td>
-									<td>1.30 P.M.</td>
-									<td><a class="btn btn-danger " >Delete</a></td>
-								</tr>
+							<?php endforeach; ?>
 							</tbody>
 						</table>
 					</div>
@@ -268,6 +252,10 @@
 <script src="../../js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../js/app.min.js"></script>
-
+<script>
+	function sure() {
+		return confirm("Are you sure to DELETE ?");
+	}
+</script>
 </body>
 </html>

@@ -1,3 +1,27 @@
+<?php
+	include "../../../config/db.php";
+	include "../../../functions/print.php";
+	// collecting all the routes name
+	$query = "SELECT * FROM routes";
+	$stmt = $db->query($query);
+	if(isset($_REQUEST['submit'])) {
+		foreach($stmt as $row) {
+			if($row['direction'] == $_REQUEST['selectRoute'])
+				$route_id = $row['id'];
+		}
+		// collecting the time for bus and inserting
+		$time  = $_REQUEST['time'];
+		$price = $_REQUEST['price'];
+		$query = "INSERT INTO buses( route_id, time, price ) VALUES (?,?,?)";
+		$st = $db->prepare($query);
+		$result = $st->execute(array( $route_id, $time, $price )) or die("Couldn't insert");
+		header("location: view_shedule.php");
+	}
+	
+	
+	
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,6 +41,8 @@
   <link rel="stylesheet" href="../../css/_all-skins.min.css">
 	<!-- bootstrap time picker -->
 	<link rel="stylesheet" href="../../css/bootstrap-timepicker.min.css">
+	<!-- bootstrap selectpicker -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 	<link rel="stylesheet" href="../../css/style.css">
 
   
@@ -191,36 +217,36 @@
 					<h3 class="text-center">Add New Bus shedule</h3>		
 				</div>
 				<div class="col-md-6 col-md-offset-2">
-					<form>
+					<form method="post" action="" >
 						<!-- select place -->
 							<div class="form-group">
-								<label > Select Route </label>
-								<div class="btn-group show_value">
+								<label > Select Route  </label>
+								<select name="selectRoute" class="selectpicker">
+<!--
 									<button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										Please Select a Route <span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu select_route">
-										<li><a href="#">place(A) to place(B)</a></li>
-										<li><a href="#">place(A) to place(B)</a></li>
-										<li><a href="#">place(A) to place(B)</a></li>
-									</ul>
-								</div>
+-->
+									<?php foreach($stmt as $row): ?>
+										<option value="<?= $row['direction'] ?>"> <?= $row['direction'] ?></option>
+									<?php endforeach; ?>
+								</select>
 							</div>
 						<!-- timepicker-->
 							<div class="form-group">
 								<label for="timepicker">Select Time</label>
 								<div class="input-group bootstrap-timepicker timepicker">
 									<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-									<input  id="timepicker" type="text" class="form-control input-small">
+									<input name="time" id="timepicker" type="text" class="form-control input-small">
 								</div>
 							</div>
 						<!-- select price -->
 		 					<div class="form-group">
 								<label for="ticket_price" >Ticket Price</label>
-								<input type="text" class="form-control ticket_price" id="ticket_price" placeholder="Ticket Price">
+								<input name="price" type="text" class="form-control ticket_price" id="ticket_price" placeholder="Ticket Price">
 							</div>
 							<div class="form-group">
-								<input type="submit" value="ADD" class="btn btn-primary btn-block">
+								<input name="submit" type="submit" value="ADD" class="btn btn-primary btn-block">
 							</div> 
 		 			</form>	
 				</div>
@@ -245,6 +271,8 @@
 <script src="../../js/app.min.js"></script>
 <!--bootstrap time picker-->
 <script src="../../js/bootstrap-timepicker.min.js" ></script>
+<!-- select picker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script src="../../js/main.js"></script>
 </body>
 </html>
