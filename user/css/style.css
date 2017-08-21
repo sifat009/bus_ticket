@@ -1,0 +1,64 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.footer_area {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 50px;
+  background-color: #f5f5f5;
+}
+/*sticky footer style end*/
+
+body {
+  color: #000;
+	height: 100%;
+	margin-bottom: 100px;
+}
+.no_border td {
+	border: none !important;
+}
+.header_area {
+	min-height: 50px;
+}
+.content_area{
+}
+.content_area h1{
+	padding: 15% 20% 20px 20%;
+	letter-spacing: 5px;
+	word-spacing: 5px;
+	font-weight: bold;
+}
+.content_area h3{
+	padding: 5px 0px 30px;
+}
+.content_area a {
+}
+.select_top {
+	padding: 10px 0px;
+}
+
+.confirm_top_info {
+	margin-bottom: 50px;
+}
+.confirm_top_info table, td{
+	padding: 0px 3px;
+}
+
+.seats {
+	margin-bottom: 80px;
+}
+
+
+.footer_area {
+	background-color: black;
+	color: #fff;
+}
+.footer_area p {
+	padding: 10px;
+}
