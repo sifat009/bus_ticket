@@ -4,6 +4,14 @@
 	// collecting all the routes name
 	$query = "SELECT * FROM routes";
 	$stmt = $db->query($query);
+
+	$booked_seats = $available_seats = 0;
+	$total_seats = 30;
+	$seats = [
+		['A1','A2','A3','A4','A5','A6','A7','A8','A9','A10'],
+		['B1','B2','B3','B4','B5','B6','B7','B8','B9','B10'],
+		['C1','C2','C3','C4','C5','C6','C7','C8','C9','C10']
+	];
 	if(isset($_REQUEST['submit'])) {
 		foreach($stmt as $row) {
 			if($row['direction'] == $_REQUEST['selectRoute'])
@@ -15,6 +23,34 @@
 		$query = "INSERT INTO buses( route_id, time, price ) VALUES (?,?,?)";
 		$st = $db->prepare($query);
 		$result = $st->execute(array( $route_id, $time, $price )) or die("Couldn't insert");
+		if($result){
+			$q = "SELECT id FROM buses ORDER BY id DESC LIMIT 1";
+			$st = $db->query($q);
+			$r = $st->fetch(PDO::FETCH_ASSOC);
+			$bus_id = $r['id'];
+//			$total_seats = 30;
+			if($bus_id){
+				// inserting into seats table
+				$q = "INSERT INTO seats (seat_number, bus_id) VALUES (?,?)";
+				$s = $db->prepare($q);
+				foreach($seats as $v){
+					foreach($v as $seat){
+						$s->execute(array( $seat, $bus_id )) or die("Problem in insertion");
+					}
+				}
+//				
+//				$query1 = "SELECT COUNT(*) as booked_seats FROM seats WHERE bus_id = $bus_id AND (available = 0 OR available = 2)";
+//				$st = $db->query($query1);
+//				$result = $st->fetch(PDO::FETCH_ASSOC);
+//				$booked_seats = $result['booked_seats'];
+//				$available_seats = $total_seats - $booked_seats;
+//				if($result){
+//					$q = "SELECT ";
+//				}
+//				
+
+			}
+		}
 		header("location: view_shedule.php");
 	}
 	

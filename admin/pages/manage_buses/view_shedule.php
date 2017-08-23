@@ -3,15 +3,23 @@
 	include "../../../functions/print.php";
 	$query = "SELECT buses.id,routes.direction, buses.time FROM buses JOIN routes WHERE( buses.route_id = routes.id )";
 	$result = $db->query($query);
-	if(isset($_GET['id'])){
+	@$get_id = $_GET['id'];
+	if(isset($get_id)){
 		$q = "DELETE FROM buses WHERE id = ?";
+		
 		$stmt = $db->prepare($q);
-		$r = $stmt->execute(array($_GET['id']));
+		
+		$r = $stmt->execute(array($get_id));
+		
 		if($r){
-			header("location: view_shedule.php");
-		} else{
-			echo "Error in deleting";
-		}
+			$q1 = "DELETE FROM seats WHERE bus_id = ?";
+			$stmt1 = $db->prepare($q1);
+			$r1 = $stmt1->execute(array($get_id)) or die("Couldn't delete");
+			if($r1){
+				header("location: view_shedule.php");	
+			}
+			
+		} 	
 	}
 ?>
 

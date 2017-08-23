@@ -1,3 +1,17 @@
+<?php
+	include "../../../config/db.php";
+	include "../../../functions/print.php";
+	
+	$q = "SELECT buses.id, routes.direction, CONVERT(date, date) as date, buses.time, buses.total_seats, buses.active,
+		  CASE
+			WHEN (seats.available = 1)
+			  THEN COUNT( seats.available )
+		  END as available_seats FROM buses
+		  JOIN routes ON (buses.route_id = routes.id) 
+		  JOIN seats ON (buses.id = seats.bus_id) GROUP BY buses.id";
+	$stmt = $db->query($q);
+	
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -208,104 +222,25 @@
 									</tr>
 								</thead>
 								<tbody>
+								<?php foreach($stmt as $row): ?>
 									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
+										<td><?= $row['id'] ?></td>
+										<td><?= $row['direction'] ?></td>
+										<td><?= $row['date'] ?></td>
+										<td><?= $row['time'] ?></td>
+										<td><?= $row['total_seats'] ?></td>
+										<td><?= $row['total_seats'] - $row['available_seats'] ?></td>
+										<td><?= $row['available_seats'] ?></td>
 										<td>
-											<a class="btn btn-warning " >Edit</a>
-											<a class="btn btn-info">Seats</a>
-											<a class="btn btn-success">Turn On</a>
+											<?php if($row['active'] == 1): ?>
+												<a href="update.php?id=<?= $row['id'] ?>&active=<?= $row['active'] ?>" class="btn btn-success">Turn Off</a>
+											<?php else: ?>
+												<a href="update.php?id=<?= $row['id'] ?>&active=<?= $row['active'] ?>"  class="btn btn-danger">Turn On</a>
+											
+											<?php endif; ?>
 										</td>
 									</tr>
-									<tr>
-										<td>2</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-warning " >Edit</a>
-											<a class="btn btn-info">Seats</a>
-											<a class="btn btn-danger">Turn Off</a>
-										</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-warning " >Edit</a>
-											<a class="btn btn-info">Seats</a>
-											<a class="btn btn-danger">Turn Off</a>
-										</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-warning " >Edit</a>
-											<a class="btn btn-info">Seats</a>
-											<a class="btn btn-danger">Turn Off</a>
-										</td>
-									</tr>
-									<tr>
-										<td>5</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-warning " >Edit</a>
-											<a class="btn btn-info">Seats</a>
-											<a class="btn btn-danger">Turn Off</a>
-										</td>
-									</tr>
-									<tr>
-										<td>6</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-warning " >Edit</a>
-											<a class="btn btn-info">Seats</a>
-											<a class="btn btn-danger">Turn Off</a>
-										</td>
-									</tr>
-									<tr>
-										<td>7</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-warning " >Edit</a>
-											<a class="btn btn-info">Seats</a>
-											<a class="btn btn-danger">Turn Off</a>
-										</td>
-									</tr>
+								<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>
@@ -330,6 +265,20 @@
 <script src="../../js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../js/app.min.js"></script>
-
+<script>
+	$('document').ready(function() {
+	var seats = $(".table a");
+	seats.click(function(){
+		if($(this).attr('class') == 'btn btn-danger'){
+			$(this).removeClass('btn-danger');
+			$(this).addClass('btn-success');
+			
+		}else{
+			$(this).removeClass('btn-success');
+			$(this).addClass('btn-danger');
+		}	
+	});
+});
+</script>
 </body>
 </html>
