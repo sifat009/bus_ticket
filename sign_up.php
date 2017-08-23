@@ -1,3 +1,17 @@
+<?php
+	include "config/db.php";
+	include "functions/print.php";
+
+	if(isset($_REQUEST['submit'])){
+		$name = $_REQUEST['user_name'];
+		$password = md5($_REQUEST['password']);
+		
+		$q = "INSERT INTO users(name, password) VALUES(?,?)";
+		$stmt = $db->prepare($q);
+		$r = $stmt->execute(array($name, $password)) or die("Connection Error");
+		header("location: login.php");
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,11 +45,7 @@
 					<label for="password">Password</label>
 					<input required type="password" placeholder="your password" id="password" name="password" class="form-control">
 				</div>
-				<div class="form-group">
-					<label for="confirm_password">confirm password</label>
-					<input required type="password" placeholder="Retype your password" id="confirm_password" class="form-control">
-				</div>
-				<input type="submit" class="btn btn-primary form-control" value="Let's Go">
+				<input type="submit" name="submit" class="btn btn-primary form-control" value="Let's Go">
 		</form>
 			</div>
 		</div>

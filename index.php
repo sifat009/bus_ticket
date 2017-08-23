@@ -1,3 +1,11 @@
+<?php
+	include "config/db.php";
+	include "functions/print.php";	
+	//include "check.php";	
+	session_start();
+	
+	
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,12 +42,25 @@
             <li><a href="user/pages/about.php">About</a></li>
             <li><a href="user/pages/contact.php">Contact</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							  <?php if(count($_SESSION) >= 1 ): ?>
+							  <?= $_SESSION['user_name'] ?>
+							  <?php else: ?>
+							  	Please log-in
+							  <?php endif; ?>
+							
+							  <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
                 <li><a href="user/pages/my_tickets.php">My Tickets</a></li>
-                <li><a href="login.php">Log-out</a></li>
+                
+                <?php if(count($_SESSION) != 0): ?>
+                <li><a href="logout.php">Log-out</a></li>
+                <?php endif; ?>
+                
+                <?php if(count($_SESSION) == 0): ?>
                 <li><a href="sign_up.php">Register</a></li>
+                <?php endif; ?>
               </ul>
             </li>
           </ul>

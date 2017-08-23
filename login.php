@@ -1,3 +1,28 @@
+<?php
+	include "config/db.php";
+	include "functions/print.php";
+
+	if(isset($_REQUEST['submit'])){
+		$name = $_REQUEST['name'];
+		$password = md5($_REQUEST['password']);
+		
+		$q = "SELECT * FROM users WHERE name = ? AND password = ?";
+		$stmt = $db->prepare($q);
+		$stmt->execute(array($name, $password)) or die("Connection Error");
+		$r = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		if($r){
+			session_start();
+			$_SESSION['user_name'] = $name;
+			$_SESSION['logged_in'] = 1;
+			header("location: index.php");
+			
+		} else{
+			header("location: login.php");
+		}
+		
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,10 +72,10 @@
 
 			<div class="row omb_row-sm-offset-3">
 				<div class="col-xs-12 col-sm-6">	
-						<form class="omb_loginForm" >
+						<form class="omb_loginForm" method="post" action="" >
 							<div class="input-group">
 								<span class="input-group-addon"><i class="fa fa-user"></i></span>
-								<input type="email" class="form-control"  name="email" placeholder="email address" required>
+								<input type="text" class="form-control"  name="name" placeholder="user name" required>
 							</div>
 							<span class="help-block"></span>
 
@@ -60,7 +85,7 @@
 							</div>
 												<span class="help-block">Password error</span>
 
-							<input type="submit" class="btn btn-primary form-control" value="Login" >
+							<input name="submit" type="submit" class="btn btn-primary form-control" value="Login" >
 						</form>
 				</div>
     	</div>
@@ -76,10 +101,12 @@
 				</p>
 			</div>
 		</div>
+<!--
 		<div class="col-md-12 text-center  bottom-text">
 			<p class="bg-info">To log-in as admin use password : <strong>admin</strong></p>
 			<p class="bg-warning">To log-in as user use password : <strong>user</strong></p>
 		</div>
+-->
 	</div>
  </div>
 	
@@ -91,6 +118,7 @@
 <script src="user/js/bootstrap.min.js"></script>
 <!--main js-->
 <script src="user/js/main.js"></script>
+<!--
 <script>
 	var form = document.getElementsByTagName('form');
 	var pass = document.getElementsByName('password');
@@ -106,5 +134,6 @@
 	}
 	
 </script>
+-->
 </body>
 </html>
