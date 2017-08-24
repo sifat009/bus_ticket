@@ -52,14 +52,14 @@
 							  <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
-                <li><a href="user/pages/my_tickets.php">My Tickets</a></li>
-                
-                <?php if(count($_SESSION) != 0): ?>
-                <li><a href="logout.php">Log-out</a></li>
+           		<?php if(count($_SESSION) != 0): ?>
+					<li><a href="user/pages/my_tickets.php">My Tickets</a></li>
+					<li><a href="logout.php">Log-out</a></li>
                 <?php endif; ?>
                 
                 <?php if(count($_SESSION) == 0): ?>
-                <li><a href="sign_up.php">Register</a></li>
+                	<li><a href="login.php">Log-in</a></li>
+                	<li><a href="sign_up.php">Register</a></li>
                 <?php endif; ?>
               </ul>
             </li>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 23, 2017 at 05:27 PM
+-- Generation Time: Aug 24, 2017 at 10:01 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `buses` (
   `active` char(1) NOT NULL DEFAULT '1',
   `price` varchar(20) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `buses`
@@ -56,7 +56,8 @@ INSERT INTO `buses` (`id`, `route_id`, `total_seats`, `time`, `active`, `price`,
 (1, '1', 30, '1:45 PM', '1', '500', '2017-08-23 13:31:39'),
 (2, '2', 30, '9:45 AM', '1', '700', '2017-08-23 13:32:22'),
 (3, '5', 30, '4:45 PM', '0', '500', '2017-08-23 13:32:35'),
-(4, '1', 30, '8:15 PM', '1', '700', '2017-08-23 16:04:45');
+(4, '1', 30, '8:15 PM', '1', '700', '2017-08-23 16:04:45'),
+(5, '5', 30, '4:30 PM', '1', '500', '2017-08-24 13:19:09');
 
 -- --------------------------------------------------------
 
@@ -107,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `seats` (
   `seat_number` varchar(11) NOT NULL,
   `available` char(1) NOT NULL DEFAULT '1',
   `bus_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `seats`
@@ -233,7 +234,37 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`) VALUES
 (117, 'C7', '1', 4),
 (118, 'C8', '1', 4),
 (119, 'C9', '1', 4),
-(120, 'C10', '1', 4);
+(120, 'C10', '1', 4),
+(121, 'A1', '1', 5),
+(122, 'A2', '1', 5),
+(123, 'A3', '1', 5),
+(124, 'A4', '1', 5),
+(125, 'A5', '1', 5),
+(126, 'A6', '1', 5),
+(127, 'A7', '1', 5),
+(128, 'A8', '1', 5),
+(129, 'A9', '1', 5),
+(130, 'A10', '1', 5),
+(131, 'B1', '1', 5),
+(132, 'B2', '1', 5),
+(133, 'B3', '1', 5),
+(134, 'B4', '1', 5),
+(135, 'B5', '1', 5),
+(136, 'B6', '1', 5),
+(137, 'B7', '1', 5),
+(138, 'B8', '1', 5),
+(139, 'B9', '1', 5),
+(140, 'B10', '1', 5),
+(141, 'C1', '1', 5),
+(142, 'C2', '1', 5),
+(143, 'C3', '1', 5),
+(144, 'C4', '1', 5),
+(145, 'C5', '1', 5),
+(146, 'C6', '1', 5),
+(147, 'C7', '1', 5),
+(148, 'C8', '1', 5),
+(149, 'C9', '1', 5),
+(150, 'C10', '1', 5);
 
 -- --------------------------------------------------------
 
@@ -320,7 +351,7 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `buses`
 --
 ALTER TABLE `buses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `passengers`
 --
@@ -335,7 +366,7 @@ ALTER TABLE `routes`
 -- AUTO_INCREMENT for table `seats`
 --
 ALTER TABLE `seats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=121;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=151;
 --
 -- AUTO_INCREMENT for table `users`
 --

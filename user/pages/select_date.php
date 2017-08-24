@@ -1,3 +1,14 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";	
+	//include "check.php";	
+	session_start();
+	
+	$q = "SELECT * FROM routes";
+	$st = $db->query($q);
+	
+	
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,12 +47,24 @@
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<?php if(count($_SESSION)): ?>
+								<?= $_SESSION['user_name'] ?>
+							<?php else: ?>
+								Please log-in
+							<?php endif; ?>
+							  <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
+               <?php if(count($_SESSION)): ?>
                 <li><a href="my_tickets.php">My Tickets</a></li>
-                <li><a href="../../login.php">Log-out</a></li>
+                <li><a href="../../logout.php">Log-out</a></li>
+                <?php endif; ?>
+                
+                <?php if(!count($_SESSION)): ?>
+                <li><a href="../../login.php">Log-in</a></li>
                 <li><a href="../../sign_up.php">Register</a></li>
+                <?php endif; ?>
               </ul>
             </li>
           </ul>
@@ -55,21 +78,23 @@
 				<div class="col-md-12 text-center">
 					<h3><strong>Pick a Date and Route</strong></h3>
 				</div>
+				<div class="col-md-12 text-center">
+					<p class=" text-danger" ><?php if(isset($_REQUEST['msg'])) echo $_REQUEST['msg']; ?></p>
+				</div>
 				<div class="col-md-10 col-md-offset-1 main_content_area">
-					<form>
-						<select class="form-control form-group">
+					<form method="post" action="view_bus_shedule.php">
+						<select name="route" class="form-control form-group">
 							<option>Select Route</option>
-							<option>Place(A) to place(B)</option>
-							<option>Place(A) to place(B)</option>
-							<option>Place(A) to place(B)</option>
-							<option>Place(A) to place(B)</option>
+							<?php foreach($st as $row): ?>
+								<option value="<?= $row['direction'] ?>" ><?= $row['direction'] ?></option>
+							<?php endforeach; ?>
 						</select>
 						<div class="form-group-lg">
-							<input type="text" class="form-control set_date " id="set_date" placeholder="Set date">
+							<input type="text" name="date" class="form-control set_date " id="set_date" placeholder="Set date">
 						</div>
 						<br>
 						<div class="form-group">
-							<a href="view_bus_shedule.php" class="btn btn-primary btn-block">View Buses</a>
+							<input type="submit" class="btn btn-primary btn-block" value="View Buses" />
 						</div>
 					</form>
 				</div>

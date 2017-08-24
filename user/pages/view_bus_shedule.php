@@ -1,3 +1,29 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";	
+	//include "check.php";	
+	session_start();
+	
+	$choosed_date = $_REQUEST['date'];
+	$direction = $_REQUEST['route'];
+	$current_date = date("m/d/Y");
+	if( $choosed_date >= $current_date ){
+		$q = "SELECT buses.id, routes.direction, CONVERT(date, date) as date, buses.time, buses.total_seats, buses.active,
+			  CASE
+				WHEN (seats.available = 1)
+				  THEN COUNT( seats.available )
+			  END as available_seats FROM buses
+			  JOIN routes ON (buses.route_id = routes.id) 
+			  JOIN seats ON (buses.id = seats.bus_id) GROUP BY buses.id
+			  HAVING ((routes.direction = '$direction') AND (buses.active = 1)) ";
+		$stmt = $db->query($q);	
+		
+	} else{
+		$msg = "Not Available buses for choosed date";
+		header("location: select_date.php?msg=$msg");
+	}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,12 +60,24 @@
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<?php if(count($_SESSION)): ?>
+								<?= $_SESSION['user_name'] ?>
+							<?php else: ?>
+								please log-in
+							<?php endif; ?>
+							 <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
+                <?php if(count($_SESSION)): ?>
                 <li><a href="my_tickets.php">My Tickets</a></li>
-                <li><a href="../../login.php">Log-out</a></li>
+                <li><a href="../../logout.php">Log-out</a></li>
+                <?php endif; ?>
+                
+                <?php if(!count($_SESSION)): ?>
+                <li><a href="../../login.php">Log-in</a></li>
                 <li><a href="../../sign_up.php">Register</a></li>
+                <?php endif; ?>
               </ul>
             </li>
           </ul>
@@ -69,90 +107,28 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a href="../../login.php" class="btn btn-warning">Log-in to reserve seats</a>
-										</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a  href="reserve_seats.php" class="btn btn-success">Reserve Seats</a>
-										</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a  href="reserve_seats.php" class="btn btn-success">Reserve Seats</a>
-										</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a  href="reserve_seats.php"  class="btn btn-success">Reserve Seats</a>
-										</td>
-									</tr>
-									<tr>
-										<td>5</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a  href="reserve_seats.php"  class="btn btn-success">Reserve Seats</a>
-										</td>
-									</tr>
-									<tr>
-										<td>6</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-success">Reserve Seats</a>
-										</td>
-									</tr>
-									<tr>
-										<td>7</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a  href="reserve_seats.php"  class="btn btn-success">Reserve Seats</a>
-										</td>
-									</tr>
+									<?php if($stmt): ?>
+										<?php foreach($stmt as $row): ?>
+										<tr>
+											<td><?= $row['id'] ?></td>
+											<td><?= $row['direction'] ?></td>
+											<td><?= $row['date'] ?></td>
+											<td><?= $row['time'] ?></td>
+											<td><?= $row['total_seats'] ?></td>
+											<td><?= $row['total_seats'] - $row['available_seats'] ?></td>
+											<td><?= $row['available_seats'] ?></td>
+											
+											<td>
+												<?php if(!count($_SESSION)): ?>
+													<a href="../../login.php" class="btn btn-warning">Log-in to reserve seats</a>
+												<?php else: ?>	
+													<a  href="reserve_seats.php" class="btn btn-success">Reserve Seats</a>
+												<?php endif; ?>
+											</td>
+											
+										</tr>
+										<?php endforeach; ?>
+									<?php endif; ?>
 								</tbody>
 							</table>
 						</div>
