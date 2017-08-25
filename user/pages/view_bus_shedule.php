@@ -9,10 +9,8 @@
 	$current_date = date("m/d/Y");
 	if( $choosed_date >= $current_date ){
 		$q = "SELECT buses.id, routes.direction, CONVERT(date, date) as date, buses.time, buses.total_seats, buses.active,
-			  CASE
-				WHEN (seats.available = 1)
-				  THEN COUNT( seats.available )
-			  END as available_seats FROM buses
+			  SUM( CASE seats.available WHEN 1 THEN 1 ELSE null END )
+			  as available_seats FROM buses
 			  JOIN routes ON (buses.route_id = routes.id) 
 			  JOIN seats ON (buses.id = seats.bus_id) GROUP BY buses.id
 			  HAVING ((routes.direction = '$direction') AND (buses.active = 1)) ";

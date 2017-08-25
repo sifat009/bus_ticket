@@ -2,6 +2,20 @@
 	include "../../config/db.php";
 	include "../../functions/print.php";	
 	session_start();
+	
+	$bus_id = $_SESSION['bus_id'];
+	$q = "SELECT buses.id, routes.direction, CONVERT(buses.date, date) as date, buses.time, buses.total_seats
+			FROM buses JOIN routes ON (buses.route_id = routes.id) HAVING (buses.id = $bus_id)";
+	$st = $db->prepare($q);
+	$st->execute(array( $bus_id )) or die("Connection error");
+	$r = $st->fetch(PDO::FETCH_ASSOC);
+	if(isset($_REQUEST['submit'])) {
+		$_SESSION['passenger_name'] = $_REQUEST['name'];
+		$_SESSION['mobile_number'] = $_REQUEST['number'];
+		$_SESSION['start_place'] = $_REQUEST['start_place'];
+		$_SESSION['end_place'] = $_REQUEST['end_place'];
+		header("location: transection_id.php");
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,12 +53,12 @@
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<?= $_SESSION['user_name'] ?> <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
                 <li><a href="my_tickets.php">My Tickets</a></li>
-                <li><a href="../../login.php">Log-out</a></li>
-                <li><a href="../../sign_up.php">Register</a></li>
+                <li><a href="../../logout.php">Log-out</a></li>
               </ul>
             </li>
           </ul>
@@ -63,49 +77,49 @@
 							<tr>
 								<td>Bus ID</td>
 								<td>:</td>
-								<td>128</td>
+								<td><?= $r['id'] ?></td>
 							</tr>
 							<tr>
 								<td>Route</td>
 								<td>:</td>
-								<td>Place 1 to Place 2</td>
+								<td><?= $r['direction'] ?></td>
 							</tr>
 							<tr>
 								<td>Date</td>
 								<td>:</td>
-								<td> 04/05/2017</td>
+								<td><?= $r['date'] ?></td>
 							</tr>
 							<tr>
 								<td>Time</td>
 								<td>:</td>
-								<td>09:00 AM</td>
+								<td><?= $r['time'] ?></td>
 							</tr>
 							<tr>
 								<td>Total Seats</td>
 								<td>:</td>
-								<td>30</td>
+								<td><?= $r['total_seats'] ?></td>
 							</tr>
 						</table>
 				</div>
 				<div class="col-md-10 col-md-offset-1 main_content_area">
-					<form action="transection_id.php">
+					<form action="" method="post">
 						<div class="form-group">
 							<label for="name">Passenger's name</label>
-							<input type="text" class="form-control" id="name" placeholder="Enter your Name" required >
+							<input type="text" class="form-control" id="name" name="name" placeholder="Enter your Name" required >
 						</div>
 						<div class="form-group">
 							<label for="number">Passenger's Mobile Number</label>
-							<input type="text" class="form-control" id="number" placeholder="Enter your Number" required >
+							<input type="text" class="form-control" name="number"  id="number" placeholder="Enter your Number" required >
 						</div>
 						<div class="form-group">
 							<label for="start_place">Start Place</label>
-							<input type="text" class="form-control" id="start_place" placeholder="Start Place" required >
+							<input type="text" class="form-control" name="start_place" id="start_place" placeholder="Start Place" required >
 						</div>
 						<div class="form-group">
 							<label for="end_place">Depart Place</label>
-							<input type="text" class="form-control" id="end_place" placeholder="Depart Place" required>
+							<input type="text" class="form-control" name="end_place"  id="end_place" placeholder="Depart Place" required>
 						</div>
-						<input type="submit" class="btn btn-success btn-block" value="Confirm"  >
+						<input type="submit" name="submit" class="btn btn-success btn-block" value="Confirm"  >
 					</form>
 				</div>
 			</div>

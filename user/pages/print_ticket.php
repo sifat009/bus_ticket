@@ -1,3 +1,18 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";	
+	session_start();
+	
+	$seats = $_SESSION['seats'];
+	$bus_id = $_SESSION['bus_id'];
+	$passenger_id = $_SESSION['passenger_id'];
+
+	$q = "UPDATE seats SET available = 2, passenger_id = $passenger_id WHERE bus_id = $bus_id AND seat_number = ?";
+	$st = $db->prepare($q);
+	foreach($seats as $seat){
+		$st->execute(array($seat)) or die("COULDN'T UPDATE");
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,8 +53,7 @@
 							</a>
               <ul class="dropdown-menu">
                 <li><a href="my_tickets.php">My Tickets</a></li>
-                <li><a href="../../login.php">Log-out</a></li>
-                <li><a href="../../sign_up.php">Register</a></li>
+                <li><a href="../../logout.php">Log-out</a></li>
               </ul>
             </li>
           </ul>
@@ -57,12 +71,12 @@
 					<div class="alert alert-success">
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<p>
-							Your Seats A2 , Confirmed Successfully. Thank you !
+							Your Seats  <?php foreach($seats as $seat) echo "<b> $seat </b>" ?> , Confirmed Successfully. Thank you !
 						</p>
 					</div>
 				</div>
 				<div class="col-md-10 col-md-offset-1 main_content_area">
-						<a  href="#" class="btn btn-success btn-block ">Print This Ticket</a>
+<!--						<a  href="#" class="btn btn-success btn-block ">Print This Ticket</a>-->
 						<a  href="my_tickets.php" class="btn btn-success btn-block">My tickets</a>
 				</div>
 			</div>
