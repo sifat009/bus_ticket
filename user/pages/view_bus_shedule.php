@@ -122,7 +122,7 @@
 												<?php if(!count($_SESSION)): ?>
 													<a href="../../login.php" class="btn btn-warning">Log-in to reserve seats</a>
 												<?php else: ?>	
-													<a  href="reserve_seats.php" class="btn btn-success">Reserve Seats</a>
+													<a  href="reserve_seats.php?bus_id=<?= $row['id'] ?>" class="btn btn-success">Reserve Seats</a>
 												<?php endif; ?>
 											</td>
 											

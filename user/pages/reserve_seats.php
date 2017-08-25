@@ -1,3 +1,24 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";	
+	session_start();
+	$bus_id = $_REQUEST['bus_id'];
+	$_SESSION['bus_id'] = $bus_id;
+
+	$q = "SELECT buses.id, routes.direction, CONVERT(buses.date, date) as date, buses.time, buses.total_seats
+			FROM buses JOIN routes ON (buses.route_id = routes.id) HAVING (buses.id = $bus_id)";
+	$st = $db->prepare($q);
+	$st->execute(array( $bus_id )) or die("Connection error");
+	$r = $st->fetch(PDO::FETCH_ASSOC);
+	if($r){
+		$q = "SELECT id, seat_number, available FROM seats WHERE seats.bus_id = $bus_id";
+		$st = $db->prepare($q);
+		$st->execute(array( $bus_id )) or die("Connection error");
+		$seats = $st->fetchAll(PDO::FETCH_ASSOC); 
+	}
+	
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,12 +55,24 @@
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<?php if(count($_SESSION)): ?>
+								<?= $_SESSION['user_name'] ?>
+							<?php else: ?>
+								Please log-in
+							<?php endif; ?>
+							 <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
+                <?php if(count($_SESSION)): ?>
                 <li><a href="my_tickets.php">My Tickets</a></li>
-                <li><a href="../../login.php">Log-out</a></li>
+                <li><a href="../../logout.php">Log-out</a></li>
+                <?php endif; ?>
+                
+                <?php if(!count($_SESSION)): ?>
+                <li><a href="../../login.php">Log-in</a></li>
                 <li><a href="../../sign_up.php">Register</a></li>
+                <?php endif; ?>
               </ul>
             </li>
           </ul>
@@ -60,88 +93,94 @@
 							<tr>
 								<td>Bus ID</td>
 								<td>:</td>
-								<td>128</td>
+								<td><?= $r['id'] ?></td>
 							</tr>
 							<tr>
 								<td>Route</td>
 								<td>:</td>
-								<td>Place 1 to Place 2</td>
+								<td><?= $r['direction'] ?></td>
 							</tr>
 							<tr>
 								<td>Date</td>
 								<td>:</td>
-								<td> 04/05/2017</td>
+								<td><?= $r['date'] ?></td>
 							</tr>
 							<tr>
 								<td>Time</td>
 								<td>:</td>
-								<td>09:00 AM</td>
+								<td><?= $r['time'] ?></td>
 							</tr>
 							<tr>
 								<td>Total Seats</td>
 								<td>:</td>
-								<td>30</td>
+								<td><?= $r['total_seats'] ?></td>
 							</tr>
 						</table>
 					</div>
+<!--
 					<div class="col-md-4 ">
 						<p>Select Seats and press Next</p>
 						<a href="confirm_ticket.php" class="btn btn-success btn-lg btn-block">Next</a>
 					</div>
+-->
 <!--				</div>-->
 				<!-- select seats -->
 				<div class=" col-md-10 col-md-offset-1 seats">
+				<form action="seat_check.php" method="post" >
 					<table class="table no_border">
+						<?php for($i = 0; $i < (count($seats)/3); $i++ ): ?>
 						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A1</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B1</a></td>
-							<td><a class="btn btn-danger btn-sm btn-block">C1 sold</a></td>
+							<td>
+								<?php if($seats[$i]['available'] == 1): ?>
+									<input type="button" class="btn btn-default btn-sm btn-block"
+										value = "<?= $seats[$i]['seat_number'] ?>"
+									/>
+								<?php elseif($seats[$i]['available'] == 0): ?>
+									<input type="button" class="btn btn-danger btn-sm btn-block"
+										value = "<?= $seats[$i]['seat_number'] ?> SOLD"
+									/>
+								<?php else: ?>
+									<input type="button" class="btn btn-warning btn-sm btn-block"
+										value ="<?= $seats[$i]['seat_number'] ?> PENDING"
+									/>
+								<?php endif; ?>
+							</td>
+							<td>
+								<?php if($seats[$i + 10]['available'] == 1): ?>
+									<input type="button" class="btn btn-default btn-sm btn-block"
+										value = "<?= $seats[$i + 10]['seat_number'] ?>"
+									/>
+								<?php elseif($seats[$i + 10]['available'] == 0): ?>
+									<input type="button" class="btn btn-danger btn-sm btn-block"
+										value = "<?= $seats[$i + 10]['seat_number'] ?> SOLD"
+									/>
+								<?php else: ?>
+									<input type="button" class="btn btn-warning btn-sm btn-block"
+										value ="<?= $seats[$i + 10]['seat_number'] ?> PENDING"
+									/>
+								<?php endif; ?>
+							</td>
+							<td>
+								<?php if($seats[$i + 20]['available'] == 1): ?>
+									<input type="button" class="btn btn-default btn-sm btn-block"
+										value = "<?= $seats[$i + 20]['seat_number'] ?>"
+									/>
+								<?php elseif($seats[$i + 20]['available'] == 0): ?>
+									<input type="button" class="btn btn-danger btn-sm btn-block"
+										value = "<?= $seats[$i + 20]['seat_number'] ?> SOLD"
+									/>
+								<?php else: ?>
+									<input type="button" class="btn btn-warning btn-sm btn-block"
+										value ="<?= $seats[$i + 20]['seat_number'] ?> PENDING"
+									/>
+								<?php endif; ?>
+							</td>
 						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A2</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B2</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C2</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-warning btn-sm btn-block">A3 pending</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B3</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C3</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A4</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B4</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C4</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A5</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B5</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C5</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A6</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B6</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C6</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A7</a></td>
-							<td><a class="btn btn-success btn-sm btn-block">B7</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C7</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A8</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B8</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C8</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A9</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B9</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C9</a></td>
-						</tr>
-						<tr>
-							<td><a class="btn btn-default btn-sm btn-block">A10</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">B10</a></td>
-							<td><a class="btn btn-default btn-sm btn-block">C10</a></td>
+						<?php endfor; ?>
 					</table>
+					<input id="store_seats" type="hidden" name="store_seats" value="" />
+					<input type="submit" value="NEXT" name="submit" class="btn btn-success btn-lg btn-block" >
+				</form>
 				</div>
 			</div>
 		</div>
@@ -163,6 +202,19 @@
 <!-- Bootstrap 3.3.6 -->
 <script src="../js/bootstrap.min.js"></script>
 <!--main js-->
-<script src="../js/main.js"></script>
+<!--<script src="../js/main.js"></script>-->
+<script>
+$('document').ready(function() {
+	var storSeats = $("#store_seats");
+	var seats = $(".seats table input");
+	var array = [];
+	seats.click(function(){
+		$(this).toggleClass("btn-success");
+		var value = $(this).val();
+		array.push(value);
+		storSeats.val(JSON.stringify(array));
+	});
+});
+</script>
 </body>
 </html>

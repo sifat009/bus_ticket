@@ -1,3 +1,8 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";	
+	session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
