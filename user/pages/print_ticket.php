@@ -2,7 +2,7 @@
 	include "../../config/db.php";
 	include "../../functions/print.php";	
 	session_start();
-	
+	show($_SESSION);
 	$seats = $_SESSION['seats'];
 	$bus_id = $_SESSION['bus_id'];
 	$passenger_id = $_SESSION['passenger_id'];

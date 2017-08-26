@@ -1,3 +1,6 @@
+<?php
+	session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,7 +46,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="../../img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Sifat Haque</span>
+              <span class="hidden-xs"><?= $_SESSION['admin_name'] ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -51,18 +54,20 @@
                 <img src="../../img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Sifat Haque- Web Developer
+                  <?= $_SESSION['admin_name'] ?> - Web Developer
                   
                 </p>
               </li>
 				
               <!-- Menu Footer-->
               <li class="user-footer">
+<!--
                 <div class="pull-left">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
+-->
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="../../logout.php" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -82,7 +87,7 @@
           <img src="../../img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Sifat Haque</p>
+			<p><?= $_SESSION['admin_name'] ?></p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -138,13 +143,11 @@
             </span>
           </a>
         </li>
-<!--
         <li class="treeview">
-          <a href="../../pages/bus_ticket_info.php">
-            <i class="fa fa-info"></i> <span>Bus Ticket Info</span>
+          <a href="../../pages/add_admin.php">
+            <i class="fa fa-info"></i> <span>Add New Admin</span>
           </a>
         </li>
--->
 				<li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>

@@ -57,7 +57,9 @@
 							<?= $_SESSION['user_name'] ?> <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
-                <li><a href="my_tickets.php">My Tickets</a></li>
+                <?php if(isset($_SESSION['mobile_number'])): ?>
+                		<li><a href="my_tickets.php">My Tickets</a></li>
+                <?php endif; ?>
                 <li><a href="../../logout.php">Log-out</a></li>
               </ul>
             </li>

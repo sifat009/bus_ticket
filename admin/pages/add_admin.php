@@ -1,3 +1,20 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";
+	session_start();
+	if(isset($_REQUEST['submit'])){
+		$admin_name = $_REQUEST['admin_name'];
+		$password = md5($_REQUEST['password']);
+		$query = "INSERT INTO admins ( name, password ) VALUES (?,?)";
+		$stmt = $db->prepare($query);
+		$r = $stmt->execute(array($admin_name, $password));
+		if($r){
+			$msg = "ADMIN created Successfully !!";
+		} else{
+			$msg =  "Problem in INSERT";
+		}
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,7 +61,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="../img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Sifat Haque</span>
+              <span class="hidden-xs"><?= $_SESSION['admin_name'] ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -52,18 +69,20 @@
                 <img src="../img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Sifat Haque - Web Developer
+                  <?= $_SESSION['admin_name'] ?> - Web Developer
                   
                 </p>
               </li>
 				
               <!-- Menu Footer-->
               <li class="user-footer">
+<!--
                 <div class="pull-left">
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
+-->
                 <div class="pull-right">
-                  <a href="../../login.php" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="../../logout.php" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -83,7 +102,7 @@
           <img src="../img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Sifat Haque</p>
+          <p><?= $_SESSION['admin_name'] ?></p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -139,13 +158,11 @@
             </span>
           </a>
         </li>
-<!--
         <li class="active treeview">
           <a href="#">
-            <i class="fa fa-info"></i> <span>Bus Ticket Info</span>
+            <i class="fa fa-info"></i> <span>Add New Admin</span>
           </a>
         </li>
--->
 				<li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
@@ -185,129 +202,43 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+        <section class="content">
       <div class="container">
-	  		<div class="row">
-				<!-- heading of the content -->
-					<div class="col-md-10 content-heading">
-						<h3 class="text-center">Buses  Information</h3>		
+	  	<div class="row">
+	  	
+				<div class="col-md-10 content-heading">
+					<h3 class="text-center">Add New Admin</h3>		
+				</div>
+				<?php if(isset($msg)): ?>
+				<div class="details col-md-10 col-md-offset-1">
+					<div class="alert alert-success">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<p>
+							<?= $msg ?>
+						</p>
 					</div>
-				<!-- table start -->
-					<div class="col-md-10 col-md-offset-1">
-						<div class="table-responsive">
-							<table class="table table-striped table-hover">
-								<thead>
-									<tr>
-										<th>Bus#</th>
-										<th>Route</th>
-										<th>Date</th>
-										<th>Time</th>
-										<th>Total Seats</th>
-										<th>booked Seats</th>
-										<th>Available Seats</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-info" >Seat Info</a>
-											<a class="btn btn-success">Print Copy</a>
-										</td>
-									</tr>
-									<tr>
-										<td>2</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-info" >Seat Info</a>
-											<a class="btn btn-success">Print Copy</a>
-										</td>
-									</tr>
-									<tr>
-										<td>3</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-info" >Seat Info</a>
-											<a class="btn btn-success">Print Copy</a>
-										</td>
-									</tr>
-									<tr>
-										<td>4</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-info" >Seat Info</a>
-											<a class="btn btn-success">Print Copy</a>
-										</td>
-									</tr>
-									<tr>
-										<td>5</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-info" >Seat Info</a>
-											<a class="btn btn-success">Print Copy</a>
-										</td>
-									</tr>
-									<tr>
-										<td>6</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-info" >Seat Info</a>
-											<a class="btn btn-success">Print Copy</a>
-										</td>
-									</tr>
-									<tr>
-										<td>7</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>40</td>
-										<td>5</td>
-										<td>35</td>
-										<td>
-											<a class="btn btn-info" >Seat Info</a>
-											<a class="btn btn-success">Print Copy</a>
-										</td>
-									</tr>
-								</tbody>
-							</table>
+				</div>
+				<?php endif; ?>
+				<div class="col-md-6 col-md-offset-2">
+					<form method="post" action="">
+		 				<div class="form-group">
+								<label for="admin_name" >Admin Name</label>
+								<input type="text" class="form-control route_name" id="admin_name" name="admin_name" placeholder="Admin Name">
 						</div>
-					</div>
-      	 <!-- table end -->
+		 				<div class="form-group">
+								<label for="password" >password</label>
+								<input type="password" class="form-control route_name" id="password" name="password" placeholder="password">
+						</div>
+						<div class="form-group">
+							<input type="submit" value="ADD" name="submit" class="btn btn-primary btn-block">
+						</div> 
+		 			</form>	
+				</div>
+      	 
       	</div>
-      </div> 
-    </section>
+      </div>  
+	  
+	</section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->

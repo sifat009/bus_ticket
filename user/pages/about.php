@@ -1,3 +1,6 @@
+<?php
+	session_start();
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,12 +37,25 @@
             <li><a href="#">About</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							
+							<?php if(count($_SESSION) >= 1 ): ?>
+							  <?= $_SESSION['user_name'] ?>
+							  <?php else: ?>
+							  	Please log-in
+							  <?php endif; ?>
+							<span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
-                <li><a href="my_tickets.php">My Tickets</a></li>
-                <li><a href="../../login.php">Log-out</a></li>
-                <li><a href="../../sign_up.php">Register</a></li>
+               <?php if(count($_SESSION) != 0): ?>
+           			<?php if(isset($_SESSION['mobile_number'])): ?>
+                		<li><a href="my_tickets.php">My Tickets</a></li>
+                	<?php endif; ?>
+                <li><a href="../../logout.php">Log-out</a></li>
+                <?php else: ?>
+                	<li><a href="../../login.php">Log-in</a></li>
+                	<li><a href="../../sign_up.php">Register</a></li>
+                <?php endif; ?>
               </ul>
             </li>
           </ul>

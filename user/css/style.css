@@ -21,6 +21,7 @@ body {
   color: #000;
 	height: 100%;
 	margin-bottom: 0px;
+	padding-bottom: 160px;
 }
 .no_border td {
 	border: none !important;

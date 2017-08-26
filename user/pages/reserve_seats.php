@@ -65,7 +65,9 @@
 							</a>
               <ul class="dropdown-menu">
                 <?php if(count($_SESSION)): ?>
-                <li><a href="my_tickets.php">My Tickets</a></li>
+                <?php if(isset($_SESSION['mobile_number'])): ?>
+                		<li><a href="my_tickets.php">My Tickets</a></li>
+                <?php endif; ?>
                 <li><a href="../../logout.php">Log-out</a></li>
                 <?php endif; ?>
                 
