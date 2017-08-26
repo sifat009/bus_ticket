@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 25, 2017 at 08:22 PM
+-- Generation Time: Aug 26, 2017 at 11:31 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -54,7 +54,6 @@ CREATE TABLE IF NOT EXISTS `buses` (
 
 INSERT INTO `buses` (`id`, `route_id`, `total_seats`, `time`, `active`, `price`, `date`) VALUES
 (1, '1', 30, '1:45 PM', '1', '500', '2017-08-23 13:31:39'),
-(2, '2', 30, '9:45 AM', '1', '700', '2017-08-23 13:32:22'),
 (3, '5', 30, '4:45 PM', '0', '500', '2017-08-23 13:32:35'),
 (4, '1', 30, '8:15 PM', '1', '700', '2017-08-23 16:04:45'),
 (5, '5', 30, '4:30 PM', '1', '500', '2017-08-24 13:19:09');
@@ -73,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `passengers` (
   `depart_place` varchar(20) NOT NULL,
   `transection_id` varchar(50) NOT NULL,
   `bus_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `passengers`
@@ -81,7 +80,11 @@ CREATE TABLE IF NOT EXISTS `passengers` (
 
 INSERT INTO `passengers` (`id`, `name`, `mobile_number`, `start_place`, `depart_place`, `transection_id`, `bus_id`) VALUES
 (3, 'sifat haque', '01932391487', 'Dhaka', 'Chittagong', '123456', 5),
-(4, 'rifat haque', '01675545631', 'Dhaka', 'Chittagong', '12345', 5);
+(4, 'rifat haque', '01675545631', 'Dhaka', 'Chittagong', '12345', 5),
+(5, 'sohel', '01710885924', 'Dhaka', 'Comilla', '12121212', 1),
+(6, 'sohel khan', '01710885924', 'Dhaka', 'Comilla', '12121212', 1),
+(7, 'asraf', '01710885924', 'Dhaka', 'Comilla', '12121212', 1),
+(8, 'sohel man', '01710885924', 'Dhaka', 'Comilla', '12121212', 4);
 
 -- --------------------------------------------------------
 
@@ -124,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `seats` (
 --
 
 INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`) VALUES
-(1, 'A1', '1', 1, 0),
+(1, 'A1', '2', 1, 5),
 (2, 'A2', '1', 1, 0),
 (3, 'A3', '1', 1, 0),
 (4, 'A4', '1', 1, 0),
@@ -133,8 +136,8 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (7, 'A7', '1', 1, 0),
 (8, 'A8', '1', 1, 0),
 (9, 'A9', '1', 1, 0),
-(10, 'A10', '1', 1, 0),
-(11, 'B1', '1', 1, 0),
+(10, 'A10', '0', 1, 6),
+(11, 'B1', '2', 1, 5),
 (12, 'B2', '1', 1, 0),
 (13, 'B3', '1', 1, 0),
 (14, 'B4', '1', 1, 0),
@@ -143,8 +146,8 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (17, 'B7', '1', 1, 0),
 (18, 'B8', '1', 1, 0),
 (19, 'B9', '1', 1, 0),
-(20, 'B10', '1', 1, 0),
-(21, 'C1', '1', 1, 0),
+(20, 'B10', '0', 1, 6),
+(21, 'C1', '1', 1, 7),
 (22, 'C2', '1', 1, 0),
 (23, 'C3', '1', 1, 0),
 (24, 'C4', '1', 1, 0),
@@ -154,36 +157,6 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (28, 'C8', '1', 1, 0),
 (29, 'C9', '1', 1, 0),
 (30, 'C10', '1', 1, 0),
-(31, 'A1', '1', 2, 0),
-(32, 'A2', '1', 2, 0),
-(33, 'A3', '1', 2, 0),
-(34, 'A4', '1', 2, 0),
-(35, 'A5', '1', 2, 0),
-(36, 'A6', '1', 2, 0),
-(37, 'A7', '1', 2, 0),
-(38, 'A8', '1', 2, 0),
-(39, 'A9', '1', 2, 0),
-(40, 'A10', '1', 2, 0),
-(41, 'B1', '1', 2, 0),
-(42, 'B2', '1', 2, 0),
-(43, 'B3', '1', 2, 0),
-(44, 'B4', '1', 2, 0),
-(45, 'B5', '1', 2, 0),
-(46, 'B6', '1', 2, 0),
-(47, 'B7', '1', 2, 0),
-(48, 'B8', '1', 2, 0),
-(49, 'B9', '1', 2, 0),
-(50, 'B10', '1', 2, 0),
-(51, 'C1', '1', 2, 0),
-(52, 'C2', '1', 2, 0),
-(53, 'C3', '1', 2, 0),
-(54, 'C4', '1', 2, 0),
-(55, 'C5', '1', 2, 0),
-(56, 'C6', '1', 2, 0),
-(57, 'C7', '1', 2, 0),
-(58, 'C8', '1', 2, 0),
-(59, 'C9', '1', 2, 0),
-(60, 'C10', '1', 2, 0),
 (61, 'A1', '1', 3, 0),
 (62, 'A2', '1', 3, 0),
 (63, 'A3', '1', 3, 0),
@@ -214,7 +187,7 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (88, 'C8', '1', 3, 0),
 (89, 'C9', '1', 3, 0),
 (90, 'C10', '1', 3, 0),
-(91, 'A1', '1', 4, 0),
+(91, 'A1', '2', 4, 8),
 (92, 'A2', '1', 4, 0),
 (93, 'A3', '1', 4, 0),
 (94, 'A4', '1', 4, 0),
@@ -224,7 +197,7 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (98, 'A8', '1', 4, 0),
 (99, 'A9', '1', 4, 0),
 (100, 'A10', '1', 4, 0),
-(101, 'B1', '1', 4, 0),
+(101, 'B1', '2', 4, 8),
 (102, 'B2', '1', 4, 0),
 (103, 'B3', '1', 4, 0),
 (104, 'B4', '1', 4, 0),
@@ -244,7 +217,7 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (118, 'C8', '1', 4, 0),
 (119, 'C9', '1', 4, 0),
 (120, 'C10', '1', 4, 0),
-(121, 'A1', '2', 5, 3),
+(121, 'A1', '0', 5, 3),
 (122, 'A2', '2', 5, 4),
 (123, 'A3', '1', 5, 0),
 (124, 'A4', '1', 5, 0),
@@ -254,7 +227,7 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (128, 'A8', '1', 5, 0),
 (129, 'A9', '1', 5, 0),
 (130, 'A10', '1', 5, 0),
-(131, 'B1', '2', 5, 3),
+(131, 'B1', '0', 5, 3),
 (132, 'B2', '2', 5, 4),
 (133, 'B3', '1', 5, 0),
 (134, 'B4', '1', 5, 0),
@@ -264,7 +237,7 @@ INSERT INTO `seats` (`id`, `seat_number`, `available`, `bus_id`, `passenger_id`)
 (138, 'B8', '1', 5, 0),
 (139, 'B9', '1', 5, 0),
 (140, 'B10', '1', 5, 0),
-(141, 'C1', '2', 5, 3),
+(141, 'C1', '0', 5, 3),
 (142, 'C2', '1', 5, 0),
 (143, 'C3', '1', 5, 0),
 (144, 'C4', '1', 5, 0),
@@ -286,16 +259,19 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `action` char(1) NOT NULL DEFAULT '2',
   `bus_id` int(11) NOT NULL,
   `passenger_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tickets`
 --
 
 INSERT INTO `tickets` (`id`, `action`, `bus_id`, `passenger_id`) VALUES
-(2, '2', 1, 2),
-(3, '2', 5, 3),
-(4, '2', 5, 4);
+(3, '1', 5, 3),
+(4, '2', 5, 4),
+(5, '2', 1, 5),
+(6, '1', 1, 6),
+(7, '0', 1, 7),
+(8, '2', 4, 8);
 
 -- --------------------------------------------------------
 
@@ -381,7 +357,7 @@ ALTER TABLE `buses`
 -- AUTO_INCREMENT for table `passengers`
 --
 ALTER TABLE `passengers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `routes`
 --
@@ -396,7 +372,7 @@ ALTER TABLE `seats`
 -- AUTO_INCREMENT for table `tickets`
 --
 ALTER TABLE `tickets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `users`
 --

@@ -164,11 +164,13 @@
             </span>
           </a>
         </li>
+<!--
         <li class="treeview">
           <a href="../../pages/bus_ticket_info.php">
             <i class="fa fa-info"></i> <span>Bus Ticket Info</span>
           </a>
         </li>
+-->
 				<li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
@@ -233,7 +235,7 @@
 									<td><?= $row['id'] ?></td>
 									<td><?= $row['direction'] ?></td>
 									<td><?= $row['time'] ?></td>
-									<td><a href="view_shedule.php?id=<?= $row['id'] ?>" onclick="sure()" class="btn btn-danger " >Delete</a></td>
+									<td><a href="view_shedule.php?id=<?= $row['id'] ?>" onclick="return sure()" class="btn btn-danger " >Delete</a></td>
 								</tr>
 							<?php endforeach; ?>
 							</tbody>

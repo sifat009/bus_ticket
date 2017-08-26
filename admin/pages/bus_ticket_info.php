@@ -139,11 +139,13 @@
             </span>
           </a>
         </li>
+<!--
         <li class="active treeview">
           <a href="#">
             <i class="fa fa-info"></i> <span>Bus Ticket Info</span>
           </a>
         </li>
+-->
 				<li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>

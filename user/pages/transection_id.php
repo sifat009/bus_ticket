@@ -21,7 +21,7 @@
 		$r = $st->execute(array( $name, $mobile_number, $start_place, $end_place, $tr_id, $bus_id )) or die("Error in Insertion");
 		
 		if($r) {
-			$qu = "SELECT * FROM passengers WHERE mobile_number = $mobile_number";
+			$qu = "SELECT * FROM passengers WHERE mobile_number = $mobile_number ORDER BY id DESC LIMIT 1;";
 			$s = $db->query($qu);
 			$result = $s->fetch(PDO::FETCH_ASSOC);
 			$passenger_id = $result[id];

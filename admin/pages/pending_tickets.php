@@ -1,3 +1,14 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";
+
+	$q = "SELECT passengers.id as passenger_id, tickets.id as ticket_id, tickets.bus_id as bus_id, routes.direction, CONVERT(buses.date,date) as date, buses.time, 	passengers.transection_id, tickets.action FROM tickets
+		JOIN passengers ON ( passengers.id = tickets.passenger_id )
+		JOIN buses ON ( buses.id = tickets.bus_id )
+		JOIN routes ON ( routes.id = buses.route_id ) HAVING (action = 2)";
+	$s = $db->query($q);
+	
+?>	
 <!DOCTYPE html>
 <html>
 <head>
@@ -139,11 +150,13 @@
             </span>
           </a>
         </li>
+<!--
         <li class="treeview">
           <a href="bus_ticket_info.php">
             <i class="fa fa-info"></i> <span>Bus Ticket Info</span>
           </a>
         </li>
+-->
 		
 				<li class="treeview">
           <a href="#">
@@ -208,90 +221,30 @@
 									</tr>
 								</thead>
 								<tbody>
+									<?php foreach($s as $row): ?>
 									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>B3</td>
-										<td>1100-2200</td>
-										<td><a href="#" class="btn btn-danger">Ignore</a></td>
+										<td><?= $row['bus_id'] ?></td>
+										<td><?= $row['direction'] ?></td>
+										<td><?= $row['date'] ?></td>
+										<td><?= $row['time'] ?></td>
 										<td>
-											<a href="#" class="btn btn-success">Accept</a>
+											<?php
+												$p_id = $row['passenger_id'];	
+												$q = "SELECT seat_number FROM seats WHERE passenger_id = $p_id ";
+												$r = $db->query($q);
+												foreach($r as $seat){
+													echo "<b>". $seat['seat_number']."  </b>";
+												}
+											?>
+										</td>
+										<td><?= $row['transection_id'] ?></td>
+										<td><a   href="ignore.php?t_id=<?= $row['ticket_id'] ?>&p_id=<?= $row['passenger_id'] ?>" onclick="return sure()" class="btn btn-danger">Ignore</a></td>
+										<td>
+											<a  href="ac.php?t_id=<?= $row['ticket_id'] ?>&p_id=<?= $row['passenger_id'] ?>" onclick="return sure()"  class="btn btn-success">Accept</a>
 										</td>
 									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>B3</td>
-										<td>1100-2200</td>
-										<td><a href="#" class="btn btn-danger">Ignore</a></td>
-										<td>
-											<a href="#" class="btn btn-success">Accept</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A2</td>
-										<td>1100-2200</td>
-										<td><a href="#" class="btn btn-danger">Ignore</a></td>
-										<td>
-											<a href="#" class="btn btn-success">Accept</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>B3</td>
-										<td>1100-2200</td>
-										<td><a href="#" class="btn btn-danger">Ignore</a></td>
-										<td>
-											<a href="#" class="btn btn-success">Accept</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>B3</td>
-										<td>1100-2200</td>
-										<td><a href="#" class="btn btn-danger">Ignore</a></td>
-										<td>
-											<a href="#" class="btn btn-success">Accept</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>B3</td>
-										<td>1100-2200</td>
-										<td><a href="#" class="btn btn-danger">Ignore</a></td>
-										<td>
-											<a href="#" class="btn btn-success">Accept</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>B3</td>
-										<td>1100-2200</td>
-										<td><a href="#" class="btn btn-danger">Ignore</a></td>
-										<td>
-											<a href="#" class="btn btn-success">Accept</a>
-										</td>
-									</tr>
+									<?php endforeach; ?>
+									
 								</tbody>
 							</table>
 						</div>
@@ -316,6 +269,10 @@
 <script src="../js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../js/app.min.js"></script>
-
+<script>
+	function sure(){
+		return confirm("Are you sure to do this ?");
+	}
+</script>
 </body>
 </html>

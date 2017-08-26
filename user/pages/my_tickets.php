@@ -1,3 +1,45 @@
+<?php
+	include "../../config/db.php";
+	include "../../functions/print.php";	
+	//include "check.php";	
+	session_start();
+//	show($_SESSION);
+	$passenger_id = [];
+	$store = [];
+	$seats;
+	$mobile_number = $_SESSION['mobile_number'];
+	$q = "SELECT id FROM passengers WHERE mobile_number = $mobile_number";
+	$s = $db->query($q);
+	foreach($s as $p_id){
+		$passenger_id[] = $p_id['id'];
+	}
+
+	if($s){
+		$q = "SELECT tickets.id as ticket_id, buses.id as bus_id, routes.direction, CONVERT( buses.date, date ) as date, buses.time, tickets.action, passengers.id as passengers_id, buses.price FROM tickets
+				JOIN passengers ON (passengers.id = tickets.passenger_id)
+				JOIN buses ON ( buses.id = tickets.bus_id )
+				JOIN routes ON ( routes.id = buses.route_id )
+				HAVING (passengers.id = ? AND tickets.action != 0)";
+		$st = $db->prepare($q);
+		foreach($passenger_id as $p){
+			$st->execute(array( $p )) or die("Connection error");	
+			$store[] = $st->fetch(PDO::FETCH_ASSOC);
+		}
+		
+		$qu = "SELECT * FROM seats WHERE passenger_id = ?";
+		$s = $db->prepare($qu);
+		foreach($passenger_id as $p_id){
+			$s->execute(array( $p_id )) or die("Error");
+			$result = $s->fetchAll(PDO::FETCH_ASSOC);
+			foreach( $result as $r ){
+				$seats[$r['passenger_id']][] = $r['seat_number'];
+			}
+		}
+//		for($i = 0; $i < count($store); $i++)
+//			show(count($store[$i]));
+	}
+		
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,12 +76,12 @@
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+							<?= $_SESSION['user_name'] ?> <span class="caret"></span>
 							</a>
               <ul class="dropdown-menu">
-                <li><a href="#">My Tickets</a></li>
-                <li><a href="../../login.php">Log-out</a></li>
-                <li><a href="../../sign_up.php">Register</a></li>
+                <li><a href="my_tickets.php">My Tickets</a></li>
+                <li><a href="../../logout.php">Log-out</a></li>
               </ul>
             </li>
           </ul>
@@ -68,83 +110,31 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A3, D2</td>
-										<td>2500</td>
-										<td>
-											<a class="btn btn-success">Print Ticket</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A3, D2</td>
-										<td>2500</td>
-										<td>
-											<a class="btn btn-warning">Request Pending</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A3, D2</td>
-										<td>2500</td>
-										<td>
-											<a class="btn btn-success">Print Ticket</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A3, D2</td>
-										<td>2500</td>
-										<td>
-											<a class="btn btn-success">Print Ticket</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A3, D2</td>
-										<td>2500</td>
-										<td>
-											<a class="btn btn-success">Print Ticket</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A3, D2</td>
-										<td>2500</td>
-										<td>
-											<a class="btn btn-success">Print Ticket</a>
-										</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>place(A) to place(B)</td>
-										<td>04/03/2017</td>
-										<td>1.30 P.M.</td>
-										<td>A3, D2</td>
-										<td>2500</td>
-										<td>
-											<a class="btn btn-success">Print Ticket</a>
-										</td>
-									</tr>
+									<?php for($i = 0; $i < count($store); $i++ ): ?>
+										<?php if($store[$i] != NULL ): ?>
+										<tr>
+											<td><?= $store[$i]['ticket_id'] ?></td>
+											<td><?= $store[$i]['direction'] ?></td>
+											<td><?= $store[$i]['date'] ?></td>
+											<td><?= $store[$i]['time'] ?></td>
+											<td>
+												<?php foreach( $seats[$store[$i]['passengers_id']] as $seat ): ?>
+													<?= $seat ?>&nbsp;
+												<?php endforeach; ?>
+											</td>
+											<td>
+												<?= $store[$i]['price'] * count($seats[$store[$i]['passengers_id']]) ?>
+											</td>
+											<td>
+											<?php if( $store[$i]['action'] == 1 ): ?>
+												<a class="btn btn-success">Print Ticket</a>
+											<?php else: ?>
+												<a class="btn btn-warning">Request Pending</a>
+											<?php endif; ?>
+											</td>
+										</tr>
+										<?php endif; ?>
+									<?php endfor; ?>
 								</tbody>
 							</table>
 						</div>

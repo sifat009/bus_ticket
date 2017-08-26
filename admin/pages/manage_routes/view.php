@@ -149,11 +149,13 @@
             </span>
           </a>
         </li>
+<!--
         <li class="treeview">
           <a href="../../pages/bus_ticket_info.php">
             <i class="fa fa-info"></i> <span>Bus Ticket Info</span>
           </a>
         </li>
+-->
 	
 				<li class="treeview">
           <a href="#">

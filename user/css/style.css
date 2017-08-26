@@ -8,17 +8,19 @@ html {
 .footer_area {
   position: absolute;
   bottom: 0;
+  left: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 50px;
   background-color: #f5f5f5;
+  margin-top: 20px;
 }
 /*sticky footer style end*/
 
 body {
   color: #000;
 	height: 100%;
-	margin-bottom: 100px;
+	margin-bottom: 0px;
 }
 .no_border td {
 	border: none !important;
@@ -61,4 +63,8 @@ body {
 }
 .footer_area p {
 	padding: 10px;
+}
+
+.table{
+	margin-bottom: 25px;
 }
