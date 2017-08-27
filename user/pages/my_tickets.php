@@ -73,8 +73,10 @@
         <div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="../../index.php">Home</a></li>
+<!--
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
+-->
             <li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 							<?= $_SESSION['user_name'] ?> <span class="caret"></span>
@@ -129,7 +131,7 @@
 											</td>
 											<td>
 											<?php if( $store[$i]['action'] == 1 ): ?>
-												<a class="btn btn-success">Print Ticket</a>
+												<a href="dom1.php" class="btn btn-success">Print Ticket</a>
 											<?php else: ?>
 												<a class="btn btn-warning">Request Pending</a>
 											<?php endif; ?>

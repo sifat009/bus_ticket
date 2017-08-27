@@ -2,7 +2,7 @@
 	include "../../config/db.php";
 	include "../../functions/print.php";	
 	session_start();
-	show($_SESSION);
+//	show($_SESSION);
 	$seats = $_SESSION['seats'];
 	$bus_id = $_SESSION['bus_id'];
 	$passenger_id = $_SESSION['passenger_id'];
@@ -46,8 +46,10 @@
         <div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="../../index.php">Home</a></li>
+<!--
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
+-->
             <li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User <span class="caret"></span>
 							</a>

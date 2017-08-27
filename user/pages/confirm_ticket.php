@@ -50,8 +50,10 @@
         <div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="../../index.php">Home</a></li>
+<!--
             <li><a href="about.php">About</a></li>
             <li><a href="contact.php">Contact</a></li>
+-->
             <li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 							<?= $_SESSION['user_name'] ?> <span class="caret"></span>

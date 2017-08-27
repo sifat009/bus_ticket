@@ -1,5 +1,5 @@
 <?php
 
 	session_start();
-	if($_SESSION['logged_in'] != 1)
+	if(!isset($_SESSION['admin_name']))
 		header("location: login.php");
